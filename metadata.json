@@ -1,0 +1,6 @@
+{
+  "name": "EchoCore AI",
+  "description": "An advanced voice cloning, acoustic analysis, and personalized text-to-speech workspace designed for content creators and accessibility.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
