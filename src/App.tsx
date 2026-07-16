@@ -5135,20 +5135,67 @@ export default function App() {
               </div>
 
               {/* Action Button */}
-              <button
-                onClick={() => {
-                  playPopSound();
-                  handleExportWaveformSVG();
-                }}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-sm font-bold shadow-lg shadow-blue-100 hover:shadow-xl transition-all flex items-center justify-center space-x-2 cursor-pointer"
-              >
-                <Download className="w-4 h-4 text-blue-200" />
-                <span>Export & Download Vector SVG</span>
-              </button>
+<button
+  onClick={handleSynthesizeAndPlay}
+  className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-sm font-bold shadow-lg shadow-blue-500/20"
+>
+  <span>{isSynthesizing ? "Generating..." : "Generate & Play Audio"}</span>
+</button>
             </div>
           </div>
         </div>
       )}
     </div>
-  );
-}
+ const handleSynthesizeAndPlay = async () => {
+  if (!scriptText) {
+    alert("Please enter script first");
+    return;
+  }
+  
+  setIsSynthesizing(true);
+  
+  try {
+    const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro-preview-tts:generateContent?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: scriptText }]
+        }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: selectedGeminiVoice }
+            }
+          }
+        }
+      })
+    });
+
+    const data = await response.json();
+    const audioData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+
+    if (!audioData) throw new Error("No audio data");
+
+    const audioBlob = await fetch(`data:audio/mp3;base64,${audioData}`).then(r => r.blob());
+    const url = URL.createObjectURL(audioBlob);
+    
+    const audio = new Audio(url);
+    audio.onloadedmetadata = () => {
+      setPlayDuration(audio.duration);
+      setTrimEnd(audio.duration);
+    };
+    
+    audio.play();
+    setIsPlaying(true);
+    setExportStatusText(url);
+
+  } catch (error) {
+    console.error(error);
+    alert("TTS Failed. Check API Key");
+  }
+  setIsSynthesizing(false);
+}; 
