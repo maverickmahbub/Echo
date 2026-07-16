@@ -6,6 +6,267 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* Define CSS Variables for CSS-driven transitions */
+:root {
+  --bg-app: #f8fafc; /* slate-50 */
+  --bg-card: #ffffff; /* white */
+  --bg-sidebar-left: #ffffff;
+  --bg-sidebar-right: #f8fafc;
+  --border-main: #e2e8f0; /* slate-200 */
+  --border-muted: #f1f5f9; /* slate-100 */
+  --text-main: #0f172a; /* slate-900 */
+  --text-heading: #1e293b; /* slate-800 */
+  --text-muted: #64748b; /* slate-500 */
+  --bg-item-hover: #f1f5f9; /* slate-100 */
+  --bg-item-active: #eff6ff; /* blue-50 */
+  --border-item-active: #bfdbfe; /* blue-200 */
+}
+
+/* Dark mode theme color values */
+.dark {
+  --bg-app: #0b0f19; /* very dark slate-950/slate-900 combo */
+  --bg-card: #151d30; /* dark deep blue-slate card */
+  --bg-sidebar-left: #151d30;
+  --bg-sidebar-right: #111827;
+  --border-main: #24324f; /* dark slate border */
+  --border-muted: #1e293b;
+  --text-main: #f8fafc; /* light slate */
+  --text-heading: #f1f5f9;
+  --text-muted: #94a3b8;
+  --bg-item-hover: #1e293b; /* slate-800 */
+  --bg-item-active: #1e3a8a; /* blue-900 */
+  --border-item-active: #3b82f6; /* blue-500 */
+}
+
 body {
   font-family: var(--font-sans);
+  overflow-x: hidden; /* Prevent body horizontal overflow */
+  background-color: var(--bg-app);
+  color: var(--text-main);
+}
+
+/* Enable smooth transitions across all theme changes */
+#app-navbar,
+#sidebar-voice-library,
+#sidebar-synthesis-controls,
+#synthesis-workspace,
+#voice-call-workspace,
+#cloning-lab,
+#audio-output-player,
+div,
+aside,
+section,
+nav,
+button,
+span,
+h1,
+h2,
+h3,
+p,
+input,
+textarea,
+select,
+label,
+a {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              fill 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom layout selector overrides using CSS Variables */
+#app-navbar {
+  background-color: var(--bg-card) !important;
+  border-bottom-color: var(--border-main) !important;
+}
+
+#sidebar-voice-library {
+  background-color: var(--bg-sidebar-left) !important;
+  border-right-color: var(--border-main) !important;
+}
+
+#sidebar-synthesis-controls {
+  background-color: var(--bg-sidebar-right) !important;
+  border-left-color: var(--border-main) !important;
+}
+
+#synthesis-workspace, 
+#voice-call-workspace {
+  background-color: var(--bg-app) !important;
+}
+
+#cloning-lab {
+  background-color: var(--bg-card) !important;
+}
+
+/* Semantic utility class mappings mapped dynamically to CSS Variables */
+.bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+.bg-slate-50 {
+  background-color: var(--bg-app) !important;
+}
+
+.bg-slate-100 {
+  background-color: var(--bg-item-hover) !important;
+}
+
+.border-slate-200, 
+.border-slate-100 {
+  border-color: var(--border-main) !important;
+}
+
+/* Text class overrides */
+.text-slate-900 {
+  color: var(--text-main) !important;
+}
+
+.text-slate-800 {
+  color: var(--text-heading) !important;
+}
+
+.text-slate-700 {
+  color: var(--text-heading) !important;
+}
+
+.text-slate-600 {
+  color: var(--text-main) !important;
+}
+
+.text-slate-500 {
+  color: var(--text-muted) !important;
+}
+
+.text-slate-400 {
+  color: var(--text-muted) !important;
+}
+
+/* Interactive elements hovering overrides */
+.hover\:bg-slate-50:hover {
+  background-color: var(--bg-item-hover) !important;
+}
+
+.hover\:bg-slate-100:hover {
+  background-color: var(--bg-item-hover) !important;
+}
+
+.hover\:text-slate-800:hover {
+  color: var(--text-heading) !important;
+}
+
+/* Inputs & Forms Styling under Dark Theme */
+.dark input, 
+.dark textarea, 
+.dark select {
+  background-color: var(--bg-app) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-main) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.8;
+}
+
+/* Theme compatibility styles for custom clone items */
+.dark .bg-slate-50\/20 {
+  background-color: rgba(15, 23, 42, 0.4) !important;
+}
+
+.dark .bg-blue-50\/40 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.dark .border-blue-200 {
+  border-color: #3b82f6 !important;
+}
+
+.dark .text-blue-700 {
+  color: #60a5fa !important;
+}
+
+.dark .text-blue-800 {
+  color: #93c5fd !important;
+}
+
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.dark .bg-blue-50\/70 {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+}
+
+/* Custom CSS Media Queries for Mobile Responsiveness & Vertical Stacking */
+
+@media (max-width: 1023px) {
+  /* Enforce max-width bounds on fixed mobile sidebars to ensure content is accessible */
+  #sidebar-voice-library, 
+  #sidebar-synthesis-controls {
+    max-width: 290px !important;
+    width: 85vw !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Enforce vertical stacking on various workspace grids and card groupings */
+  .grid-cols-12, .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Prevent horizontal squeeze in voice control parameter ranges */
+  #sidebar-synthesis-controls input[type="range"] {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Tighten padding and spacings slightly to maximize screen estate without overflow */
+  #synthesis-workspace, 
+  #voice-call-workspace, 
+  #cloning-lab {
+    padding: 1rem !important;
+    gap: 1.25rem !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Secure all canvas visualizations to fit dynamically and never overflow */
+  canvas {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Clean wrapped elements in history tags and metadata fields */
+  .flex-wrap {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra tiny screens optimization */
+  #synthesis-workspace, 
+  #voice-call-workspace, 
+  #cloning-lab {
+    padding: 0.75rem !important;
+  }
+
+  /* Make header flexboxes stack nicely */
+  .flex-col {
+    flex-direction: column !important;
+  }
+  
+  /* Scale fonts to prevent clipping */
+  h1 {
+    font-size: 1.15rem !important;
+    line-height: 1.5rem !important;
+  }
+  h2 {
+    font-size: 0.95rem !important;
+  }
 }
