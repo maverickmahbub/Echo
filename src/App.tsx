@@ -5144,8 +5144,8 @@ export default function App() {
             </div>
           </div>
           </div>
+      );
       }
-      )
       
       const handleSynthesizeAndPlay = async () => { if (!scriptText) {
    alert("Please enter script first");
