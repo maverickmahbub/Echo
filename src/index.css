@@ -8,34 +8,34 @@
 
 /* Define CSS Variables for CSS-driven transitions */
 :root {
-  --bg-app: #f8fafc; /* slate-50 */
-  --bg-card: #ffffff; /* white */
-  --bg-sidebar-left: #ffffff;
-  --bg-sidebar-right: #f8fafc;
-  --border-main: #e2e8f0; /* slate-200 */
-  --border-muted: #f1f5f9; /* slate-100 */
-  --text-main: #0f172a; /* slate-900 */
-  --text-heading: #1e293b; /* slate-800 */
-  --text-muted: #64748b; /* slate-500 */
-  --bg-item-hover: #f1f5f9; /* slate-100 */
-  --bg-item-active: #eff6ff; /* blue-50 */
-  --border-item-active: #bfdbfe; /* blue-200 */
+  --bg-app: #fcfbf9; /* luxurious warm alabaster/cashmere */
+  --bg-card: #ffffff; /* pure pristine white */
+  --bg-sidebar-left: #f7f5ef; /* soft warm cashmere sand */
+  --bg-sidebar-right: #f7f5ef; /* soft warm cashmere sand */
+  --border-main: #e6ded5; /* refined organic linen border */
+  --border-muted: #f3ede4; /* extremely subtle linen outline */
+  --text-main: #2d2824; /* premium readable charcoal-brown */
+  --text-heading: #12100f; /* deep elegant black-ink */
+  --text-muted: #82776e; /* sophisticated organic taupe */
+  --bg-item-hover: #f1ede5; /* warm hover background shadow */
+  --bg-item-active: #eae3d5; /* cozy, beautifully blended warm active background */
+  --border-item-active: #b5a595; /* luxurious organic gold-beige border */
 }
 
 /* Dark mode theme color values */
 .dark {
-  --bg-app: #0b0f19; /* very dark slate-950/slate-900 combo */
-  --bg-card: #151d30; /* dark deep blue-slate card */
-  --bg-sidebar-left: #151d30;
-  --bg-sidebar-right: #111827;
-  --border-main: #24324f; /* dark slate border */
-  --border-muted: #1e293b;
-  --text-main: #f8fafc; /* light slate */
-  --text-heading: #f1f5f9;
-  --text-muted: #94a3b8;
-  --bg-item-hover: #1e293b; /* slate-800 */
-  --bg-item-active: #1e3a8a; /* blue-900 */
-  --border-item-active: #3b82f6; /* blue-500 */
+  --bg-app: #080d16; /* deep starry night velvet indigo */
+  --bg-card: #101625; /* dark jade-shadowed container slate */
+  --bg-sidebar-left: #0e1422; /* rich dark onyx */
+  --bg-sidebar-right: #0b0f19; /* premium deep void */
+  --border-main: #232d43; /* starry sky horizon lines */
+  --border-muted: #161e2e; /* dark shadow dividing line */
+  --text-main: #f3ede4; /* linen warm-white text, comfortable for reading */
+  --text-heading: #ffffff; /* crisp white headers */
+  --text-muted: #8392aa; /* elegant metallic mist gray */
+  --bg-item-hover: #1b263b; /* deep slate-sky hover */
+  --bg-item-active: #131e33; /* cosmic active state highlight */
+  --border-item-active: #10b981; /* exquisite imperial emerald accent border */
 }
 
 body {
@@ -173,32 +173,68 @@ a {
 }
 
 /* Theme compatibility styles for custom clone items */
+.bg-blue-600 {
+  background-color: #059669 !important; /* emerald-600 */
+}
+.hover\:bg-blue-700:hover {
+  background-color: #047857 !important; /* emerald-700 */
+}
+.text-blue-600 {
+  color: #059669 !important;
+}
+.text-blue-500 {
+  color: #10b981 !important;
+}
+.bg-blue-50 {
+  background-color: #ecfdf5 !important; /* emerald-50 */
+}
+.border-blue-200 {
+  border-color: #a7f3d0 !important; /* emerald-200 */
+}
+.accent-blue-600 {
+  accent-color: #059669 !important;
+}
+
+.dark .bg-blue-600 {
+  background-color: #10b981 !important; /* emerald-500 */
+}
+.dark .hover\:bg-blue-700:hover {
+  background-color: #059669 !important;
+}
+.dark .text-blue-600 {
+  color: #34d399 !important; /* emerald-400 */
+}
+.dark .text-blue-500 {
+  color: #34d399 !important;
+}
+.dark .bg-blue-50 {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+}
+.dark .border-blue-200 {
+  border-color: #059669 !important;
+}
+.dark .accent-blue-600 {
+  accent-color: #10b981 !important;
+}
+
 .dark .bg-slate-50\/20 {
   background-color: rgba(15, 23, 42, 0.4) !important;
 }
 
 .dark .bg-blue-50\/40 {
-  background-color: rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .border-blue-200 {
-  border-color: #3b82f6 !important;
+  background-color: rgba(16, 185, 129, 0.08) !important;
 }
 
 .dark .text-blue-700 {
-  color: #60a5fa !important;
+  color: #34d399 !important;
 }
 
 .dark .text-blue-800 {
-  color: #93c5fd !important;
-}
-
-.dark .bg-blue-50 {
-  background-color: rgba(59, 130, 246, 0.1) !important;
+  color: #a7f3d0 !important;
 }
 
 .dark .bg-blue-50\/70 {
-  background-color: rgba(59, 130, 246, 0.15) !important;
+  background-color: rgba(16, 185, 129, 0.12) !important;
 }
 
 /* Custom CSS Media Queries for Mobile Responsiveness & Vertical Stacking */
