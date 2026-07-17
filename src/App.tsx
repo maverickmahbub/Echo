@@ -291,6 +291,7 @@ export default function App() {
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedBaseVoice, setSelectedBaseVoice] = useState<string>("");
   const [cloningBaseVoice, setCloningBaseVoice] = useState<string>("");
+  const [cloningGender, setCloningGender] = useState<"Male" | "Female">("Male");
   const [selectedVoiceTag, setSelectedVoiceTag] = useState<string>("All");
   const [newCloneTags, setNewCloneTags] = useState<string[]>(["Casual"]);
 
@@ -2040,19 +2041,57 @@ export default function App() {
           const initials = newCloneName.trim().substring(0, 2).toUpperCase();
           const basePitchMultiplier = voiceAnalysisResult ? (voiceAnalysisResult.pitch / 145) : 1.0;
 
+          const chosenBaseVoice = cloningBaseVoice || selectedBaseVoice;
+          const isKnownMale = chosenBaseVoice.toLowerCase().includes("male") || 
+                              chosenBaseVoice.toLowerCase().includes("david") || 
+                              chosenBaseVoice.toLowerCase().includes("daniel") || 
+                              chosenBaseVoice.toLowerCase().includes("alex") || 
+                              chosenBaseVoice.toLowerCase().includes("george") || 
+                              chosenBaseVoice.toLowerCase().includes("mark");
+
+          const isKnownFemale = chosenBaseVoice.toLowerCase().includes("female") || 
+                                chosenBaseVoice.toLowerCase().includes("zira") || 
+                                chosenBaseVoice.toLowerCase().includes("samantha") || 
+                                chosenBaseVoice.toLowerCase().includes("hazel") || 
+                                chosenBaseVoice.toLowerCase().includes("karen") || 
+                                chosenBaseVoice.toLowerCase().includes("fiona") || 
+                                chosenBaseVoice.toLowerCase().includes("elena") || 
+                                chosenBaseVoice.toLowerCase().includes("susan") || 
+                                chosenBaseVoice.toLowerCase().includes("bangla") || 
+                                chosenBaseVoice.toLowerCase().includes("বাংলা");
+
+          let finalPitch = basePitchMultiplier;
+          if (cloningGender === "Male") {
+            // Lower pitch significantly if base voice is female/neutral to produce a deep male sound
+            if (!isKnownMale) {
+              finalPitch = Math.min(finalPitch, 0.72); // Shift down to ~ -6 semitones
+            } else {
+              finalPitch = Math.min(finalPitch, 1.0);
+            }
+          } else {
+            // Raise pitch if base voice is male to produce a female sound
+            if (!isKnownFemale) {
+              finalPitch = Math.max(finalPitch, 1.35); // Shift up to ~ +5 semitones
+            } else {
+              finalPitch = Math.max(finalPitch, 1.1);
+            }
+          }
+
           const newClone: VoiceClone = {
             id: "clone-" + Date.now(),
             name: newCloneName.trim(),
             initials: initials,
             similarity: Math.floor(Math.random() * 6) + 93, // 93% - 98%
-            pitch: Number(basePitchMultiplier.toFixed(2)),
+            pitch: Number(finalPitch.toFixed(2)),
             rate: 1.0,
-            description: voiceAnalysisResult ? `Simulated ${voiceAnalysisResult.warmth}` : "My Cloned Voice Profile",
+            description: voiceAnalysisResult 
+              ? `Simulated ${voiceAnalysisResult.warmth} (${cloningGender === "Male" ? "Male / পুরুষ" : "Female / মহিলা"})` 
+              : `My Cloned Voice Profile (${cloningGender === "Male" ? "Male / পুরুষ" : "Female / মহিলা"})`,
             emotion: selectedEmotion,
             stability: voiceAnalysisResult ? voiceAnalysisResult.stability : 75,
             clarity: voiceAnalysisResult ? voiceAnalysisResult.clarity : 90,
             custom: true,
-            baseVoiceName: cloningBaseVoice || selectedBaseVoice,
+            baseVoiceName: chosenBaseVoice,
             tags: newCloneTags.length > 0 ? newCloneTags : ["Casual"],
           };
 
@@ -3216,9 +3255,15 @@ export default function App() {
                           <p className={`text-xs font-bold truncate ${isActive ? "text-blue-900" : "text-slate-800"}`}>
                             {clone.name}
                           </p>
-                          <p className={`text-[9px] font-semibold italic truncate ${isActive ? "text-blue-600" : "text-slate-400"}`}>
-                            {clone.similarity}% Similarity Profile
-                          </p>
+                          <div className="flex items-center space-x-1.5">
+                            <span className={`text-[9px] font-semibold italic truncate ${isActive ? "text-blue-600" : "text-slate-400"}`}>
+                              {clone.similarity}% Match
+                            </span>
+                            <span className="text-[9px] text-slate-300">•</span>
+                            <span className="text-[9px] font-medium truncate max-w-[100px] text-slate-400" title={clone.description}>
+                              {clone.description}
+                            </span>
+                          </div>
                           
                           {/* Small tag badges on cards */}
                           {clone.tags && clone.tags.length > 0 && (
@@ -5226,6 +5271,64 @@ export default function App() {
                           placeholder="যেমন: আমার নিজের কণ্ঠ, বাবার ভয়েস, My Voice V3"
                           className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white"
                         />
+                      </div>
+
+                      {/* Gender Selection */}
+                      <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl space-y-2.5">
+                        <label className="block text-xs font-bold text-slate-700 uppercase">Voice Gender / ভয়েসের ধরন (অবশ্যই সঠিকটি সিলেক্ট করুন)</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playPopSound();
+                              setCloningGender("Male");
+                              // Try to find a male voice from available voices
+                              const maleVoice = availableVoices.find(v => 
+                                v.name.toLowerCase().includes("male") || 
+                                v.name.toLowerCase().includes("david") || 
+                                v.name.toLowerCase().includes("daniel") || 
+                                v.name.toLowerCase().includes("alex") || 
+                                v.name.toLowerCase().includes("george")
+                              );
+                              if (maleVoice) setCloningBaseVoice(maleVoice.name);
+                            }}
+                            className={`py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center space-x-2 border transition-all cursor-pointer ${
+                              cloningGender === "Male"
+                                ? "bg-emerald-600 border-emerald-600 text-white shadow-sm font-extrabold"
+                                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                            }`}
+                          >
+                            <span>👨 Male / পুরুষ কণ্ঠ</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playPopSound();
+                              setCloningGender("Female");
+                              // Try to find a female voice from available voices
+                              const femaleVoice = availableVoices.find(v => 
+                                v.name.toLowerCase().includes("female") || 
+                                v.name.toLowerCase().includes("zira") || 
+                                v.name.toLowerCase().includes("samantha") || 
+                                v.name.toLowerCase().includes("hazel") || 
+                                v.name.toLowerCase().includes("karen") || 
+                                v.name.toLowerCase().includes("bangla") || 
+                                v.name.toLowerCase().includes("বাংলা")
+                              );
+                              if (femaleVoice) setCloningBaseVoice(femaleVoice.name);
+                            }}
+                            className={`py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center space-x-2 border transition-all cursor-pointer ${
+                              cloningGender === "Female"
+                                ? "bg-emerald-600 border-emerald-600 text-white shadow-sm font-extrabold"
+                                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                            }`}
+                          >
+                            <span>👩 Female / মহিলা কণ্ঠ</span>
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-slate-500 leading-normal">
+                          আপনার নিজের লিঙ্গ অনুযায়ী সঠিক অপশনটি নির্বাচন করুন। আপনি পুরুষ হলে <strong>Male / পুরুষ কণ্ঠ</strong> সিলেক্ট করলে, এআই স্বয়ংক্রিয়ভাবে একটি পুরুষালি গম্ভীর বেস কণ্ঠ সেট করে দেবে যাতে ভয়েসটি মেয়েলি না শোনায়!
+                        </p>
                       </div>
 
                       <div>
